@@ -1,0 +1,39 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cpren.dao.QuestionDao">
+
+    <select id="queryAllQuestion" resultType="com.cpren.pojo.Question">
+        SELECT
+            r.*, (
+                SELECT
+                    GROUP_CONCAT(rule_id)
+                FROM
+                    kn_knowledge_config
+                WHERE
+                    knowledge_id = r.knowledge_id
+                AND rule_type = 1
+            ) AS fields
+        FROM
+            kn_question r
+        WHERE
+            r.del = 0
+        AND r.knowledge_id IN (
+            SELECT
+                id
+            FROM
+                kn_knowledge a
+            WHERE
+                a.del = 0
+            AND (
+                a. STATUS = 1
+                OR (
+                    a. STATUS = 5
+                    AND a.read_expire = 2
+                )
+            )
+            AND web_id = 111
+            and domain_id  in (1,2)
+        )
+    </select>
+
+</mapper>

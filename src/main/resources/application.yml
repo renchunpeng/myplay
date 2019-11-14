@@ -1,0 +1,38 @@
+server:
+  context-path: /cpren
+  port: 8888
+
+spring:
+  # 接收返回时间格式化
+  jackson:
+    date-format: yyyy-MM-dd HH:mm
+  # 数据库相关配置
+  datasource:
+    druid:
+      username: readonly
+      password: readonly
+      url: jdbc:mysql://192.168.1.143/v5_190630_aikn?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&autoReconnectForPools=true&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true
+      type: com.alibaba.druid.pool.DruidDataSource
+  # redis相关配置
+  redis:
+    database: 15
+    host: 127.0.0.1
+    port: 6379
+    password:
+
+jodconverter:
+  enabled: true
+  port-numbers: 8100
+  office-home: "C:/Program Files (x86)/OpenOffice 4/"
+  max-tasks-per-process: 10
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:/mapper/*.xml
+
+cpren:
+  sso:
+    findToken: "http://www.sso.com:9999/sso/findToken"
+    toLogin: "http://www.sso.com:9999/sso/toLogin"
+

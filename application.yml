@@ -1,0 +1,31 @@
+#
+#Wed Nov 13 15:07:42 CST 2019
+druid=
+password=
+jackson=
+office-home="C\:/Program Files (x86)/OpenOffice 4/"
+findToken="http\://www.sso.com\:9999/sso/findToken"
+type=com.alibaba.druid.pool.DruidDataSource
+map-underscore-to-camel-case=true
+username=readonly
+url=jdbc\:mysql\://192.168.1.143/v5_190630_aikn?useUnicode\=true&characterEncoding\=utf-8&autoReconnect\=true&autoReconnectForPools\=true&zeroDateTimeBehavior\=convertToNull&useSSL\=false&allowMultiQueries\=true
+port-numbers=8100
+datasource=
+sso=
+enabled=true
+port=6379
+context-path=/cpren
+configuration=
+spring=
+database=15
+host=127.0.0.1
+date-format=yyyy-MM-dd HH\:mm
+mapper-locations=classpath\:/mapper/*.xml
+server=
+mybatis=
+jodconverter=
+max-tasks-per-process=10
+cpren=
+server.port=8877
+toLogin="http\://www.sso.com\:9999/sso/toLogin"
+redis=
