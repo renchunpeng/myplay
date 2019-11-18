@@ -1,66 +1,57 @@
 package com.cpren;
 
-import com.cpren.lucene.LucencUtil;
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.highlight.*;
+
+import org.apache.http.HttpHost;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.CreateIndexRequest;
+import org.elasticsearch.client.indices.CreateIndexResponse;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import java.io.IOException;
-import java.io.StringReader;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class Temp {
-    @Autowired
-    private LucencUtil lucencUtil;
-
+//    @Autowired
+//    private ObjectMapper objectMapper;
 
     @Test
-    public void search() throws ParseException, IOException, InvalidTokenOffsetsException {
-        String key = "标准申请";
-        IndexSearcher indexSearcher = lucencUtil.getIndexSearcher();
+    public void rcp() {
+        RestHighLevelClient client = new RestHighLevelClient(
+                RestClient.builder(
+                        new HttpHost("localhost", 9200, "http"),
+                        new HttpHost("localhost", 9201, "http")));
 
-        IKAnalyzer analyzer=new IKAnalyzer();
-        //可以指定默认搜索的域是多个
-        String[] fields = {"question","answer"};
-        //创建一个MulitFiledQueryParser对象
-        MultiFieldQueryParser parser = new MultiFieldQueryParser(fields,analyzer);
-        Query query=parser.parse(key);
+            // 1、创建 创建索引request 参数：索引名mess
+        CreateIndexRequest request = new CreateIndexRequest("twitter");
 
-        long start=System.currentTimeMillis();
-        TopDocs hits=indexSearcher.search(query, 10);
-        long end=System.currentTimeMillis();
-        System.out.println("匹配 "+key+" ，总共花费"+(end-start)+"毫秒"+"查询到"+hits.totalHits+"个记录");
+        // 2、设置索引的settings
+        request.settings(Settings.builder()
+                .put("index.number_of_shards", 3)
+                .put("index.number_of_replicas", 2)
+        );
 
-        QueryScorer scorer=new QueryScorer(query);
-        Fragmenter fragmenter=new SimpleSpanFragmenter(scorer);
-        SimpleHTMLFormatter simpleHTMLFormatter=new SimpleHTMLFormatter("<b><font color='red'>","</font></b>");
-        Highlighter highlighter=new Highlighter(simpleHTMLFormatter, scorer);
-        highlighter.setTextFragmenter(fragmenter);
-        for(ScoreDoc scoreDoc:hits.scoreDocs){
-            Document doc=indexSearcher.doc(scoreDoc.doc);
-            System.out.println(doc.get("question"));
-            String answer=doc.get("answer");
-            if(answer!=null){
-                TokenStream tokenStream=analyzer.tokenStream("answer", new StringReader(answer));
-                /**
-                 * getBestFragment方法用于输出摘要（即权重大的内容）
-                 */
-                System.out.println(highlighter.getBestFragment(tokenStream, answer));
-            }
+            // 3、设置索引的mappings
+        request.mapping(
+                "{\n" +
+                        "  \"properties\": {\n" +
+                        "    \"message\": {\n" +
+                        "      \"type\": \"text\"\n" +
+                        "    }\n" +
+                        "  }\n" +
+                        "}",
+                XContentType.JSON);
+
+        try {
+            CreateIndexResponse createIndexResponse = client.indices().create(request, RequestOptions.DEFAULT);
+//            System.out.println(objectMapper.writeValueAsString(createIndexResponse));
+            System.out.println(createIndexResponse.index());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-
 }
