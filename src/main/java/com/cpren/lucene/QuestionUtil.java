@@ -2,10 +2,7 @@ package com.cpren.lucene;
 
 import com.cpren.pojo.LuceneFieldData;
 import com.cpren.pojo.Question;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.LongField;
-import org.apache.lucene.document.TextField;
+import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,10 +26,8 @@ public class QuestionUtil {
         doc.add(new LongField(LuceneFieldData.LU_FIELD_QUESTION_ID, question.getId(), Field.Store.YES));
         // 问题
         doc.add(new TextField(LuceneFieldData.LU_FIELD_QUESTION, question.getQuestion(), Field.Store.YES));
-//        // 问题类型
-//        doc.add(new NumericDocValuesField(LuceneFieldData.LU_FIELD_QUESTION_TYPE, question.getType()));
-//        // 知识配置
-//        doc.add(new TextField(LuceneFieldData.LU_FIELD_KNOWLEDGE_FIELD, question.getFields(), Field.Store.YES));
+        // 问题答案
+        doc.add(new TextField(LuceneFieldData.LU_FIELD_ANSWER, question.getAnswer() == null?"空值":question.getAnswer(), Field.Store.YES));
         try {
             indexWriter.addDocument(doc);
         } catch (IOException e) {

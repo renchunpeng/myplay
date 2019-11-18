@@ -15,4 +15,7 @@ import java.util.List;
 public interface QuestionDao {
 
     List<Question> queryAllQuestion();
+
+    @Select("select a.*,b.answer from kn_question a left join kn_answer b on a.knowledge_id = b.knowledge_id where LENGTH(answer) > 300 limit 100")
+    List<Question> queryQuestion();
 }

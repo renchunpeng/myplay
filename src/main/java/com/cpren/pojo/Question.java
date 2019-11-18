@@ -45,4 +45,6 @@ public class Question implements Serializable {
 
     private String fields;
 
+    private String answer;
+
 }

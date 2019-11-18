@@ -6,15 +6,12 @@ import com.cpren.lucene.QuestionUtil;
 import com.cpren.pojo.Question;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.cjk.CJKAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
-import org.apache.lucene.search.highlight.Formatter;
-import org.apache.lucene.search.highlight.Highlighter;
-import org.apache.lucene.search.highlight.QueryScorer;
-import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
+import org.apache.lucene.search.highlight.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +53,7 @@ public class QuestionTest {
         if(b) {
             log.warn("索引清除成功!");
         }
-        List<Question> questions = questionDao.queryAllQuestion();
+        List<Question> questions = questionDao.queryQuestion();
         try {
             for (Question question : questions) {
                 questionUtil.addQuestionField(question);
@@ -67,6 +64,11 @@ public class QuestionTest {
         }
     }
 
+    /**
+     * 单个term分词搜索
+     * @throws IOException
+     * @throws ParseException
+     */
     @Test
     public void testSearchIndex() throws IOException, ParseException {
         IndexSearcher indexSearcher = lucencUtil.getIndexSearcher();
@@ -87,40 +89,45 @@ public class QuestionTest {
     }
 
     /**
-     * 关键命中词高亮输出处理
-     * @param query
-     * @param context
-     * @return
-     * @throws Exception
+     * 高亮显示搜索结果摘要
+     * 针对多个term
+     * @throws ParseException
+     * @throws IOException
+     * @throws InvalidTokenOffsetsException
      */
-    public static String getHighlighterString(Query query,String context)throws Exception{
-        //对促成文档匹配的实际项进行评分
-        QueryScorer scorer=new QueryScorer(query);
-        //设置高亮的HTML标签格式
-        Formatter simpleHTMLFormatter=new SimpleHTMLFormatter("","");
-        //实例化高亮分析器
-        Highlighter highlighter=new Highlighter(simpleHTMLFormatter,scorer);
-        //提供静态方法，支持从数据源中获取TokenStream，进行token处理
-        TokenStream tokenStream=new CJKAnalyzer().tokenStream("question", new StringReader(context));
-        return highlighter.getBestFragment(tokenStream, context);
-    }
-
     @Test
-    public void searcherTest()throws Exception{
-        //  Indexer();
-        IndexSearcher is = lucencUtil.getIndexSearcher();
-        QueryParser qp=new QueryParser("question",new IKAnalyzer());
-        String q="资产分界点";
-        Query query=qp.parse(q);
-        TopDocs tDocs=is.search(query,11);
-        System.out.println("查询-》"+q+"《-总共命中【"+tDocs.totalHits+"】条结果");
-        for (ScoreDoc scoredoc:tDocs.scoreDocs){
-            Document doc = is.doc(scoredoc.doc);
-            String context=doc.get("question");
-            if(context!=null){
-                System.out.println(getHighlighterString(query,context));
-            }
+    public void HighlighterSearch() throws ParseException, IOException, InvalidTokenOffsetsException {
+        String key = "标准申请";
+        IndexSearcher indexSearcher = lucencUtil.getIndexSearcher();
 
+        IKAnalyzer analyzer=new IKAnalyzer();
+        //可以指定默认搜索的域是多个
+        String[] fields = {"question","answer"};
+        //创建一个MulitFiledQueryParser对象
+        MultiFieldQueryParser parser = new MultiFieldQueryParser(fields,analyzer);
+        Query query=parser.parse(key);
+
+        long start=System.currentTimeMillis();
+        TopDocs hits=indexSearcher.search(query, 10);
+        long end=System.currentTimeMillis();
+        System.out.println("匹配 "+key+" ，总共花费"+(end-start)+"毫秒"+"查询到"+hits.totalHits+"个记录");
+
+        QueryScorer scorer=new QueryScorer(query);
+        Fragmenter fragmenter=new SimpleSpanFragmenter(scorer);
+        SimpleHTMLFormatter simpleHTMLFormatter=new SimpleHTMLFormatter("<b><font color='red'>","</font></b>");
+        Highlighter highlighter=new Highlighter(simpleHTMLFormatter, scorer);
+        highlighter.setTextFragmenter(fragmenter);
+        for(ScoreDoc scoreDoc:hits.scoreDocs){
+            Document doc=indexSearcher.doc(scoreDoc.doc);
+            System.out.println(doc.get("question"));
+            String answer=doc.get("answer");
+            if(answer!=null){
+                TokenStream tokenStream=analyzer.tokenStream("answer", new StringReader(answer));
+                /**
+                 * getBestFragment方法用于输出摘要（即权重大的内容）
+                 */
+                System.out.println(highlighter.getBestFragment(tokenStream, answer));
+            }
         }
     }
 
