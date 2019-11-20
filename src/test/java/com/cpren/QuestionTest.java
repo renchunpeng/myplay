@@ -75,7 +75,7 @@ public class QuestionTest {
         BooleanQuery.Builder booleanQuery = new BooleanQuery.Builder();
 
         QueryParser queryParser = new QueryParser("question", new IKAnalyzer());
-        Query query = queryParser.parse("资产分界点");
+        Query query = queryParser.parse("标准申请");
         booleanQuery.add(query, BooleanClause.Occur.MUST);
 
 
@@ -97,7 +97,7 @@ public class QuestionTest {
      */
     @Test
     public void HighlighterSearch() throws ParseException, IOException, InvalidTokenOffsetsException {
-        String key = "标准申请";
+        String key = "地面距离";
         IndexSearcher indexSearcher = lucencUtil.getIndexSearcher();
 
         IKAnalyzer analyzer=new IKAnalyzer();
@@ -120,6 +120,7 @@ public class QuestionTest {
         for(ScoreDoc scoreDoc:hits.scoreDocs){
             Document doc=indexSearcher.doc(scoreDoc.doc);
             System.out.println(doc.get("question"));
+            System.out.println("</br>");
             String answer=doc.get("answer");
             if(answer!=null){
                 TokenStream tokenStream=analyzer.tokenStream("answer", new StringReader(answer));
@@ -127,6 +128,7 @@ public class QuestionTest {
                  * getBestFragment方法用于输出摘要（即权重大的内容）
                  */
                 System.out.println(highlighter.getBestFragment(tokenStream, answer));
+                System.out.println("</br>");
             }
         }
     }
