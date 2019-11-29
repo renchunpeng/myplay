@@ -249,5 +249,13 @@
             <version>1.22</version>
         </dependency>
 
+        <!-- 用于远程连接linux执行shell命令的 -->
+        <dependency>
+            <groupId>ch.ethz.ganymed</groupId>
+            <artifactId>ganymed-ssh2</artifactId>
+            <version>262</version>
+        </dependency>
+
+
     </dependencies>
 </project>
