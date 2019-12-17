@@ -78,8 +78,9 @@ public class QuestionTest {
         Query query = queryParser.parse("标准申请");
         booleanQuery.add(query, BooleanClause.Occur.MUST);
 
-
-        TopDocs topDocs = indexSearcher.search(booleanQuery.build(), 1000);
+        MyCollector myCollector = new MyCollector();
+        indexSearcher.search(booleanQuery.build(), myCollector);
+        TopDocs topDocs = myCollector.getTopDocs(3);
         System.out.println("查询结果的总条数：" + topDocs.totalHits);
 
         for (ScoreDoc scoreDoc : topDocs.scoreDocs) {

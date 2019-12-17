@@ -4,6 +4,7 @@ import com.cpren.utils.JsoupUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 
@@ -21,8 +22,10 @@ public class JsoupTest {
 
     @Test
     public void CreateIndex() {
-        Document document = JsoupUtils.getDocument("http://www.shizongzui.cc/longzu/");
-        Elements nodeByCss = JsoupUtils.getNodeByCss(document, ".booklist clearfix");
-        System.out.println();
+        Document document = JsoupUtils.getDocument("http://longzu5.yunzhonggexiaoshuo.com/");
+        Elements nodeByCss = JsoupUtils.getNodeByCss(document, "#clearfix");
+        for (Element element : nodeByCss) {
+            System.out.println(JsoupUtils.getValueFromAttributeKey(element, "href"));
+        }
     }
 }

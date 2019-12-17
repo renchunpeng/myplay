@@ -1,13 +1,9 @@
 package com.cpren;
 
-import cn.hutool.json.JSONUtil;
 import com.cpren.dao.ExamQuestionDao;
-import com.cpren.dao.QuestionDao;
 import com.cpren.lucene.LucencUtil;
 import com.cpren.lucene.QuestionUtil;
 import com.cpren.pojo.Examquestion;
-import com.cpren.pojo.LuceneFieldData;
-import com.cpren.pojo.Question;
 import com.cpren.utils.pageHelper.PageHelperUtils;
 import com.cpren.utils.pageHelper.Pagination;
 import com.cpren.utils.yw.YWJsonUtils;
@@ -19,12 +15,7 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +36,7 @@ import java.util.List;
 public class ExamQuestionTest {
 
     @Autowired
-    private LucencUtil lucencUtil;
+    private LucencUtil lucencUtil = new LucencUtil();
 
     @Autowired
     private QuestionUtil questionUtil;

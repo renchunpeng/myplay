@@ -256,6 +256,12 @@
             <version>262</version>
         </dependency>
 
+        <!-- 庖丁分词器 -->
+        <dependency>
+            <groupId>net.paoding</groupId>
+            <artifactId>paoding-rose-load</artifactId>
+            <version>2.0</version>
+        </dependency>
 
     </dependencies>
 </project>

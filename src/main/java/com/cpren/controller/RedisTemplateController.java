@@ -23,6 +23,9 @@ public class RedisTemplateController {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
     @RequestMapping("addUser")
     @ResponseBody
     public User addUser() throws JsonProcessingException {
@@ -35,5 +38,18 @@ public class RedisTemplateController {
     @RequestMapping("notice")
     public void delete() throws JsonProcessingException {
         stringRedisTemplate.convertAndSend("tellRobot", objectMapper.writeValueAsString(Singleton.get(User.class)));
+    }
+
+    @RequestMapping("get")
+    @ResponseBody
+    public String get() throws JsonProcessingException {
+        boolean lock = redisTemplate.opsForValue().setIfAbsent("name", "rcp");
+        return String.valueOf(lock);
+    }
+
+    @RequestMapping("release")
+    @ResponseBody
+    public void release() throws JsonProcessingException {
+        redisTemplate.opsForValue().getOperations().delete("name");
     }
 }
