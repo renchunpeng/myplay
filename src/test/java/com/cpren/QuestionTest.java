@@ -80,7 +80,7 @@ public class QuestionTest {
 
         MyCollector myCollector = new MyCollector();
         indexSearcher.search(booleanQuery.build(), myCollector);
-        TopDocs topDocs = myCollector.getTopDocs(3);
+        TopDocs topDocs = myCollector.getTopDocs(10);
         System.out.println("查询结果的总条数：" + topDocs.totalHits);
 
         for (ScoreDoc scoreDoc : topDocs.scoreDocs) {

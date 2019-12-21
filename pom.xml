@@ -263,5 +263,11 @@
             <version>2.0</version>
         </dependency>
 
+        <!-- aop切面的时候这个必须要加的，不会自动配置 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

@@ -43,6 +43,7 @@ public class MyCollector implements Collector, LeafCollector {
     @Override
     public void collect(int doc) throws IOException {
         System.out.println("收集器起效果了"+doc);
+        System.out.println(scorer.score());
         docs.add(new ScoreDoc(doc + docBase,scorer.score()));
     }
 }
