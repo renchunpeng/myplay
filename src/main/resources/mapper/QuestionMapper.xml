@@ -36,4 +36,8 @@
         )
     </select>
 
+    <select id="test" resultType="java.util.HashMap">
+        select * from kn_question limit 10
+    </select>
+
 </mapper>

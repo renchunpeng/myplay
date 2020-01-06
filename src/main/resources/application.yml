@@ -3,6 +3,8 @@ server:
   port: 8888
 
 spring:
+  session:
+    store-type: redis
   # 接收返回时间格式化
   jackson:
     date-format: yyyy-MM-dd HH:mm

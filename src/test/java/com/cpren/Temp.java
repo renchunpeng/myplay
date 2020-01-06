@@ -1,26 +1,28 @@
 package com.cpren;
 
+import com.cpren.dao.QuestionDao;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class Temp {
-    public static void main(String[] args) {
-        List<String> stringList = new ArrayList<>();
-        stringList.add("ddd2");
-        stringList.add("aaa2");
-        stringList.add("bbb1");
-        stringList.add("aaa1");
-        stringList.add("bbb3");
-        stringList.add("ccc");
-        stringList.add("bbb2");
-        stringList.add("ddd1");
+    @Autowired
+    private QuestionDao questionDao;
 
-//        stringList
-//                .stream()
-//                .sorted()
-//                .map(String::length).collect()
+    @Test
+    public void renchunpeng() {
+        List<Map> test = questionDao.test();
+        for (Map map : test){
+            System.out.println(map);
+        }
     }
 }
