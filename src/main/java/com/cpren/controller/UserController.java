@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -85,17 +84,9 @@ public class UserController {
         return "success";
     }
 
-    @RequestMapping("/login")
-    @ResponseBody
-    public boolean login(HttpServletRequest request) {
-        User user = new User();
-        user.setUserName("任春鹏-来自A系统");
-        user.setAge("27");
-        user.setSex("男");
-        user.setAddress("南京市雨花台区小行路158号");
-        user.setBirth(new Date());
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user);
-        return true;
-    }
+//    @GetMapping("/login")
+//    @ResponseBody
+//    public String login() {
+//        return "login";
+//    }
 }

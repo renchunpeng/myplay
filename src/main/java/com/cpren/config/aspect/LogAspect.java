@@ -3,7 +3,6 @@ package com.cpren.config.aspect;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -14,8 +13,8 @@ import java.util.Arrays;
  * Created by wuwf on 17/4/27.
  * 日志切面
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class LogAspect {
     @Pointcut("execution(public * com.cpren.controller.*.*(..))")
     public void webLog(){}

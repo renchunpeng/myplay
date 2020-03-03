@@ -23,6 +23,6 @@ public class SmbTest {
     }
 
     public static void main(String[] args) {
-        test("smb://dev:dev123@192.168.1.133/dev/任春鹏/");
+        test("smb://dev:dev123@192.168.1.133/dev/a张媛媛/");
     }
 }
