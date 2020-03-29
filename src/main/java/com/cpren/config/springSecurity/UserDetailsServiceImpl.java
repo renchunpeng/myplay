@@ -23,11 +23,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         //为每个授权中心对象写入权限名
-        grantedAuthorities.add(new SimpleGrantedAuthority("/user"));
-        /**此处的user是springsecurity中的一个实现了UserDetails接口的user类，因为我们没有将entity中的user去实现
-         * UserDetails接口，所以只能在此处调用实现好的构造方法
-         */
-        return new User(username, "123456", grantedAuthorities);
+//        grantedAuthorities.add(new SimpleGrantedAuthority("/user"));
+        grantedAuthorities.add(new SimpleGrantedAuthority("/session/find"));
+        // 此处的user是springsecurity中的一个实现了UserDetails接口的user类，因为我们没有将entity中的user去实现
+        // UserDetails接口，所以只能在此处调用实现好的构造方法
+        return new User(username, "E10ADC3949BA59ABBE56E057F20F883E", grantedAuthorities);
     }
 
 }

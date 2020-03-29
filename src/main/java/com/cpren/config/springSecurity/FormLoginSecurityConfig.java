@@ -40,9 +40,17 @@ public class FormLoginSecurityConfig extends WebSecurityConfigurerAdapter {
         // 开启登录配置
         http.authorizeRequests()
                 // 允许匿名的url - 可理解为放行接口 - 多个接口使用,分割
-                .antMatchers("/login").permitAll()
+                .antMatchers(new String[]{"/login", "/user"}).permitAll()
                 // 其余所有请求都需要认证
                 .anyRequest().authenticated()
+                .and()
+                .exceptionHandling()// 报错处理
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    response.setContentType("application/json;charset=utf-8");
+                    PrintWriter out = response.getWriter();
+                    out.write("小弟弟，你没有权限访问啊！！！");
+                    out.flush();
+                })// 没有权限访问时的处理方案
                 .and()
                 // 登录接口
                 .formLogin().loginProcessingUrl("/login")
@@ -80,7 +88,10 @@ public class FormLoginSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         // 设置拦截忽略url - 会直接过滤该url - 将不会经过Spring Security过滤器链
-        web.ignoring().antMatchers("/getUserInfo");
+        // 这里设置忽略url，但是具体方法上需要权限的时候后台会直接报错，页面跳转到/error页面
+        // 如果是在.antMatchers(new String[]{"/login", "/user"}).permitAll()中设置，页面是会跳转到登陆页面，登陆成功还没有权限
+        // 就会跳转到设置的没有权限的处理方法中，最好只在这里做静态数据过滤吧
+//        web.ignoring().antMatchers("/session/**");
         // 设置拦截忽略文件夹，可以对静态资源放行
         web.ignoring().antMatchers("/css/**", "/js/**");
     }

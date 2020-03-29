@@ -41,7 +41,6 @@ public class LucencUtil {
      * @return
      * @version V5.0
      **/
-    @Synchronized
     public IndexWriter getIndexWriter() {
         if (null != indexWriter) {
             return indexWriter;

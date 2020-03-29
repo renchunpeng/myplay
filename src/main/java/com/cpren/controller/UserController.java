@@ -1,13 +1,11 @@
 package com.cpren.controller;
 
 import cn.hutool.core.codec.Base64;
-import cn.hutool.core.lang.Singleton;
 import com.cpren.pojo.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -64,29 +62,8 @@ public class UserController {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+
         return user;
     }
 
-    @RequestMapping("/singletion")
-    @ResponseBody
-    @Cacheable("user")
-    public User testSingleton(String name) {
-        User user = Singleton.get(User.class);
-        user.setUserName(name);
-        return user;
-    }
-
-    @RequestMapping("/setValue")
-    @ResponseBody
-    public String setValue() {
-        User user = Singleton.get(User.class);
-        user.setUserName("任春鹏");
-        return "success";
-    }
-
-//    @GetMapping("/login")
-//    @ResponseBody
-//    public String login() {
-//        return "login";
-//    }
 }

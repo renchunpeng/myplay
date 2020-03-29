@@ -5,7 +5,7 @@
 
     <bean id="messageListener" class="org.springframework.data.redis.listener.adapter.MessageListenerAdapter">
         <constructor-arg>
-            <bean class="com.cpren.config.RedisNotice"/> <!--消息监听对象处理具体的消息，默认调用handleMessage方法，可以在此指定 -->
+            <bean class="com.cpren.config.redis.RedisNotice"/> <!--消息监听对象处理具体的消息，默认调用handleMessage方法，可以在此指定 -->
         </constructor-arg>
     </bean>
 

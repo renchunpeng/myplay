@@ -1,0 +1,10 @@
+spring:
+  # 数据库相关配置
+  datasource:
+    druid:
+      username: root
+      password: 123456
+      url: jdbc:mysql://47.96.74.18/test
+      type: com.alibaba.druid.pool.DruidDataSource
+
+

@@ -18,13 +18,14 @@ public class SshUtils {
      *      登录成功返回true，否则返回false
      */
     public static Connection login(String ip,
+                                   int port,
                                    String userName,
                                    String userPwd){
 
         boolean flg=false;
         Connection conn = null;
         try {
-            conn = new Connection(ip);
+            conn = new Connection(ip, port);
             conn.connect();//连接
             flg=conn.authenticateWithPassword(userName, userPwd);//认证
             if(flg){
@@ -95,8 +96,8 @@ public class SshUtils {
     }
 
     public static void main(String[] args) {
-        Connection conn = login("192.168.1.72", "iyunwen", "iyunwen");
-        String pwd = execute(conn, "ps -ef | grep java");
+        Connection conn = login("2k017502c3.imwork.net", 26584, "pi", "raspberry");
+        String pwd = execute(conn, "ll");
         System.out.println(pwd);
     }
 }

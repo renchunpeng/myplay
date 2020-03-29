@@ -5,6 +5,9 @@ server:
 spring:
   session:
     store-type: redis
+  # 设置当前活跃配置文件
+  profiles:
+    active: dev
   # 接收返回时间格式化
   jackson:
     date-format: yyyy-MM-dd HH:mm

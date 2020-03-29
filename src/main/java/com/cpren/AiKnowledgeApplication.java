@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @ServletComponentScan
 @EnableCaching
 @ImportResource("classpath:redis.xml")
+@EnableAsync
 public class AiKnowledgeApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

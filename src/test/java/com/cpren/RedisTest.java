@@ -1,5 +1,6 @@
 package com.cpren;
 
+import com.cpren.pojo.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
 import java.util.Objects;
 
 @RunWith(SpringRunner.class)
@@ -23,19 +25,50 @@ public class RedisTest {
     private Long LOCK_EXPIRE = 1000 * 10L;
 
     @Test
-    public void test() {
+    public void test() throws InterruptedException {
         boolean rcp = lock("rcp");
         System.out.println(rcp);
 
         for(int i=0;i<20;i++){
-            boolean qw = lock("rcp");
-            System.out.println(qw);
-            try {
-                Thread.sleep(1000L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            new Thread(() -> {
+                boolean qw = lock("rcp");
+                System.out.println(qw);
+                try {
+                    if(qw) {
+                        System.out.println(Thread.currentThread().getName() + "抢到了锁");
+                        Thread.sleep(1000L);
+                    }else{
+                        System.out.println("没抢到锁，不知道干嘛了！");
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
         }
+
+        Thread.sleep(1000l * 5);
+    }
+
+    /**
+     * 测试list数据类型的增删改查
+     */
+    @Test
+    public void hashTest() {
+        User rcp = new User();
+        rcp.setUserName("任春鹏");
+        User wq = new User();
+        rcp.setUserName("王倩");
+        redisTemplate.opsForHash().put("knowledge","001", rcp);
+        redisTemplate.opsForHash().put("knowledge","002",wq);
+
+        Object knowledge = redisTemplate.opsForHash().get("knowledge", "001");
+        System.out.println(knowledge);
+    }
+
+    @Test
+    public void listSearchTest() {
+        List<Object> exec = redisTemplate.opsForList().getOperations().exec();
+        System.out.println(exec);
     }
 
     /**
