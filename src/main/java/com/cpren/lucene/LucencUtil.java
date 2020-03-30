@@ -1,7 +1,6 @@
 package com.cpren.lucene;
 
 import cn.hutool.core.io.FileUtil;
-import lombok.Synchronized;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -35,7 +34,7 @@ public class LucencUtil {
     private IndexSearcher indexSearcher;
 
     /**
-     * @describe 获取IndexWriter
+     * @describe 获取IndexWriter，同一时间只允许有一个IndexWriter对象存在
      * @author cp.ren
      * @date 2019-09-05 14:00:05
      * @return
