@@ -309,7 +309,7 @@
             <!-- 版本可以使用2.9.3、2.9.5 、2.9.8，不能忽略version属性-->
         </dependency>
 
-        <!--什么东西，我是rcp-->
+        <!--master 1-->
 
     </dependencies>
 </project>
