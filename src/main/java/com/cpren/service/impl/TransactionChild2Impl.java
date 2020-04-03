@@ -17,6 +17,7 @@ public class TransactionChild2Impl implements TransactionChild2 {
     @Transactional(propagation = Propagation.REQUIRED)
     public void required() {
         child2Dao.save();
+        int i = 1/0;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

@@ -24,11 +24,9 @@ public class TransactionParentImpl implements TransactionParent {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void required_required() {
-        try {
+
             transactionChild1.required();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
 
         transactionChild2.required();
     }

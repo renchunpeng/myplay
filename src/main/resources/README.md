@@ -77,3 +77,22 @@
         }
     }
     ````
+   
+  3. openoffice 使用方式
+      
+      ````
+      // 配置文件设置
+     jodconverter:
+       # 通过布尔值设定控制是否启动openoffice程序
+       enabled: false
+       port-numbers: 8100
+       office-home: "C:/Program Files (x86)/OpenOffice 4/"
+       max-tasks-per-process: 10
+     
+     // class类注入
+     @Autowired(required = false)
+     private DocumentConverter documentConverter;
+     
+     默认是自动注入的时候是这个对象必须存在，但是如果我们配置文件中设置是false这个对象就不会初始化，这样启动就会报错
+     所以这边设置不必须存在就行  
+      ````

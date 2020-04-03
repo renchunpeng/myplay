@@ -26,7 +26,8 @@ spring:
     password:
 
 jodconverter:
-  enabled: true
+  # 通过布尔值设定控制是否启动openoffice程序
+  enabled: false
   port-numbers: 8100
   office-home: "C:/Program Files (x86)/OpenOffice 4/"
   max-tasks-per-process: 10

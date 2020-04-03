@@ -17,7 +17,7 @@ public class TransactionChild1Impl implements TransactionChild1 {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void required() {
-        child1Dao.save();
+            child1Dao.save();
     }
 
     @Override
